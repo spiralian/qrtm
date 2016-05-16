@@ -90,7 +90,7 @@ void Request::signRequest()
             rawSign.append(it.value());
         }
 
-        arguments.insert("api_sig", QString(QCryptographicHash::hash(rawSign.toLatin1(), QCryptographicHash::Md5).toHex()));
+		arguments.insert("api_sig", QString(QCryptographicHash::hash(rawSign.toLatin1(), QCryptographicHash::Md5).toHex()));
     }
 }
 
@@ -113,31 +113,26 @@ QString Request::sendSyncRequest(QUrl url)
 
 void Request::responseReceived(QNetworkReply * reply)
 {
-    bool ok;
-    QVariantMap result;
-    QByteArray response = reply->readAll();
+	QVariantMap result;
+	QJsonParseError e;
+	QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll(), &e);
+	reply->deleteLater();
 
-//    qDebug() << "Resp url: " << reply->url().toString();
-//    qDebug() << "Resp rec: " << QString(response);
+	if (e.error == QJsonParseError::NoError)
+	{
+		QJsonObject jsonObj = jsonDoc.object();
+		result = jsonObj.value("rsp").toObject().toVariantMap();
+		QString status = result["stat"].toString();
 
-    reply->deleteLater();
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
-    QJsonObject jsonObj = jsonDoc.object();
-    result = jsonObj.toVariantMap();
-    //result = (jsonParser.parse(response, &ok).toMap())["rsp"].toMap();
-    ok = true;
+		if(status == "ok") {
+			emit requestFinished(result, OK);
+		}
+		else {
+			emit requestFinished(result, Fail);
+		}
+	}
+	else {
+		emit requestFinished(result, Malformed);
+	}
 
-    if(ok) {
-        QString status = result["stat"].toString();
-
-        if(status == "ok") {
-            emit requestFinished(result, OK);
-        }
-        else {
-            emit requestFinished(result, Fail);
-        }
-    }
-    else {
-        emit requestFinished(result, Malformed);
-    }
 }
