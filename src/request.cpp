@@ -24,6 +24,8 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 using namespace RTM;
 
@@ -88,7 +90,7 @@ void Request::signRequest()
             rawSign.append(it.value());
         }
 
-        arguments.insert("api_sig", QString(QCryptographicHash::hash(rawSign.toAscii(), QCryptographicHash::Md5).toHex()));
+        arguments.insert("api_sig", QString(QCryptographicHash::hash(rawSign.toLatin1(), QCryptographicHash::Md5).toHex()));
     }
 }
 
@@ -119,8 +121,11 @@ void Request::responseReceived(QNetworkReply * reply)
 //    qDebug() << "Resp rec: " << QString(response);
 
     reply->deleteLater();
-
-    result = (jsonParser.parse(response, &ok).toMap())["rsp"].toMap();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+    QJsonObject jsonObj = jsonDoc.object();
+    result = jsonObj.toVariantMap();
+    //result = (jsonParser.parse(response, &ok).toMap())["rsp"].toMap();
+    ok = true;
 
     if(ok) {
         QString status = result["stat"].toString();

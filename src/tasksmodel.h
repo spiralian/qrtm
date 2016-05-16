@@ -47,6 +47,7 @@ public:
     virtual int rowCount(const QModelIndex &index) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+    virtual QHash<int,QByteArray> roleNames() const;
     Q_INVOKABLE RTM::Task *taskForRow(const int row) const;
 
     friend class Service;

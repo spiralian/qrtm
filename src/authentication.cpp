@@ -20,9 +20,9 @@
 #include <QtCore/QDebug>
 #include <QtCore/QString>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPushButton>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 using namespace RTM;
 

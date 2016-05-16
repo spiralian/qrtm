@@ -34,6 +34,12 @@ TasksModel::TasksModel(QObject *parent) :
     QAbstractListModel(parent),
     d(new Private)
 {
+
+
+}
+
+QHash<int,QByteArray> TasksModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[Qt::DisplayRole] = "display";
     roles[PriorityRole] = "priority";
@@ -46,7 +52,7 @@ TasksModel::TasksModel(QObject *parent) :
     roles[NotesRole] = "notes";
     roles[LocationRole] = "location";
     roles[UrlRole] = "url";
-    setRoleNames(roles);
+    return roles;
 }
 
 void TasksModel::addTask(Task *task)

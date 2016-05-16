@@ -33,12 +33,18 @@ ListsModel::ListsModel(QObject *parent) :
     QAbstractListModel(parent),
     d(new Private)
 {
+
+
+}
+
+QHash<int,QByteArray> ListsModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[Qt::DisplayRole] = "display";
     roles[IdRole] = "id";
     roles[FilterRole] = "filter";
     roles[SortOrderRole] = "sortorder";
-    setRoleNames(roles);
+    return roles;
 }
 
 List *ListsModel::listFromId(const QString &id)

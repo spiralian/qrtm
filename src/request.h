@@ -20,7 +20,6 @@
 #define REQUEST_H
 
 #include "rtm.h"
-#include <qjson/parser.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
@@ -62,8 +61,7 @@ namespace RTM
         QString baseUrl;
         QString sharedSecret;
         QNetworkAccessManager * accessManager;
-        MethodType type;
-        QJson::Parser jsonParser;
+        MethodType type;        
     };
 }
 

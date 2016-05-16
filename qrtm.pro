@@ -1,12 +1,11 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-04-08T00:36:49
 # -------------------------------------------------
-QT += network
+QT += network gui widgets
 TARGET = qrtm
 TEMPLATE = lib
 DEFINES += RTMAPI_LIBRARY
 CONFIG += link_pkgconfig create_pc create_prl no_install_prl
-PKGCONFIG += QJson
 
 SOURCES += src/request.cpp \
     src/authentication.cpp \
